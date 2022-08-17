@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../context/GlobalState";
 import QuizOption from "./QuizOption";
 
-const QuizQuestion = ({ id, questionData, handleAnswerClick }) => {
+const QuizQuestion = ({ id, questionData }) => {
+  const { setAnswerClicked, addUserAnswer } = useContext(GlobalContext);
+
+  const handleAnswerClick = (answerID) => {
+    setAnswerClicked(true);
+
+    const isAnswerCorrect = questionData.correctAnswer === answerID;
+    addUserAnswer(answerID, isAnswerCorrect);
+  };
+
   return (
     <div>
-      <h3>{questionData.title}</h3>
-      <h3>{id}</h3>
+      <h3>
+        {id} - {questionData.title}
+      </h3>
       {questionData.answers.map((answer) => (
         <QuizOption
           key={answer.id}
           answerID={answer.id}
           text={answer.title}
           handleAnswerClick={handleAnswerClick}
+          isAnswer={questionData.correctAnswer === answer.id}
         />
       ))}
     </div>

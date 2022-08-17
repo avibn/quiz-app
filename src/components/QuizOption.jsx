@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../context/GlobalState";
 
-const QuizOption = ({ answerID, text, handleAnswerClick }) => {
-  const [clicked, setClicked] = useState(false);
-  const [correct, setCorrect] = useState(false); //todo: this should all be global state, so we can change the buttons back if quesiton is incorrect or correct
+const QuizOption = ({ answerID, text, handleAnswerClick, isAnswer }) => {
+  const { answerClicked } = useContext(GlobalContext);
 
   const onClick = () => {
-    setClicked(true);
-    setCorrect(handleAnswerClick(answerID));
+    handleAnswerClick(answerID);
   };
 
   return (
     <button
-      className={`option ${clicked && (correct ? "correct" : "incorrect")}`} //todo
+      className={`option ${
+        answerClicked && (isAnswer ? "correct" : "incorrect")
+      }`}
       onClick={onClick}
+      disabled={answerClicked}
     >
       {text}
 
-      {clicked && <span>{correct ? " CORRECT" : " INCORRECT"}</span>}
+      {answerClicked && <span>{isAnswer ? " CORRECT" : " INCORRECT"}</span>}
     </button>
   );
 };

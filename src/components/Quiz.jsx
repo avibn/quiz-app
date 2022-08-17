@@ -1,37 +1,45 @@
-import React from "react";
+import React, { useContext } from "react";
 import QuizQuestion from "./QuizQuestion";
 import quizzes from "../quiz.json";
 import { useState } from "react";
+import { GlobalContext } from "../context/GlobalState";
 
 const Quiz = () => {
   // index from 1
   const [questionIndex, setQuestionIndex] = useState(1);
-  const [answerClicked, setAnswerClicked] = useState(false);
+  const [quizEnded, setQuizEnded] = useState(false);
+
+  const { answerClicked, setAnswerClicked, userAnswers } =
+    useContext(GlobalContext);
 
   const currentQuestion = quizzes.questions[questionIndex];
-  console.log(currentQuestion);
-
-  const handleAnswerClick = (answerID) => {
-    setAnswerClicked(true);
-
-    if (currentQuestion.correctAnswer === answerID) {
-      return true;
-    }
-    return false;
-  };
 
   const handleNextQuestionClick = () => {
-    setQuestionIndex(questionIndex + 1);
     setAnswerClicked(false);
+    if (!quizzes.questions[questionIndex + 1]) {
+      setQuizEnded(true);
+    }
+    setQuestionIndex(questionIndex + 1);
   };
+
+  if (quizEnded) {
+    // calculate user score
+    const noCorrect = userAnswers.filter((answer) => answer.correct).length;
+    const total = userAnswers.length;
+
+    return (
+      <div>
+        <h3>Quiz has finished!</h3>
+        <p>
+          {noCorrect}/{total} correct answers.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
-      <QuizQuestion
-        id={questionIndex}
-        questionData={currentQuestion}
-        handleAnswerClick={handleAnswerClick}
-      />
+      <QuizQuestion id={questionIndex} questionData={currentQuestion} />
       {answerClicked && (
         <button onClick={handleNextQuestionClick}>Next Question</button>
       )}
