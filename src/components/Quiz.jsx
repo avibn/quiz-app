@@ -41,7 +41,9 @@ const Quiz = () => {
     <>
       <QuizQuestion id={questionIndex} questionData={currentQuestion} />
       {answerClicked && (
-        <button onClick={handleNextQuestionClick}>Next Question</button>
+        <button className="btn" onClick={handleNextQuestionClick}>
+          Next Question
+        </button>
       )}
     </>
   );

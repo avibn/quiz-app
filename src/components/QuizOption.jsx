@@ -2,24 +2,32 @@ import React, { useContext } from "react";
 import { GlobalContext } from "../context/GlobalState";
 
 const QuizOption = ({ answerID, text, handleAnswerClick, isAnswer }) => {
-  const { answerClicked } = useContext(GlobalContext);
+  const { answerClicked, userAnswers } = useContext(GlobalContext);
 
   const onClick = () => {
     handleAnswerClick(answerID);
   };
 
-  return (
-    <button
-      className={`option ${
-        answerClicked && (isAnswer ? "correct" : "incorrect")
-      }`}
-      onClick={onClick}
-      disabled={answerClicked}
-    >
-      {text}
+  let optionClass = "";
+  if (answerClicked) {
+    const answerStatus = userAnswers.at(-1);
 
-      {answerClicked && <span>{isAnswer ? " CORRECT" : " INCORRECT"}</span>}
-    </button>
+    optionClass = isAnswer
+      ? "correct"
+      : answerStatus.answerID === answerID && "incorrect";
+  }
+
+  return (
+    <>
+      <button
+        className={`btn option-btn ${optionClass}`}
+        onClick={onClick}
+        disabled={answerClicked}
+      >
+        {text}
+      </button>
+      <br />
+    </>
   );
 };
 

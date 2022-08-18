@@ -6,7 +6,6 @@ const AppReducer = (state, action) => {
         answerClicked: action.payload,
       };
     case "ADD_USER_ANSWER":
-      console.log(action.payload);
       return {
         ...state,
         userAnswers: [...state.userAnswers, action.payload],

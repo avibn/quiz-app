@@ -15,17 +15,19 @@ const QuizQuestion = ({ id, questionData }) => {
   return (
     <div>
       <h3>
-        {id} - {questionData.title}
+        {id}. {questionData.title}
       </h3>
-      {questionData.answers.map((answer) => (
-        <QuizOption
-          key={answer.id}
-          answerID={answer.id}
-          text={answer.title}
-          handleAnswerClick={handleAnswerClick}
-          isAnswer={questionData.correctAnswer === answer.id}
-        />
-      ))}
+      <div className="options">
+        {questionData.answers.map((answer) => (
+          <QuizOption
+            key={answer.id}
+            answerID={answer.id}
+            text={answer.title}
+            handleAnswerClick={handleAnswerClick}
+            isAnswer={questionData.correctAnswer === answer.id}
+          />
+        ))}
+      </div>
     </div>
   );
 };
